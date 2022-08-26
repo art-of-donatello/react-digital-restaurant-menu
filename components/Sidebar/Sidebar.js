@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 import NotificationDropdown from "components/Dropdowns/NotificationDropdown.js";
 import UserDropdown from "components/Dropdowns/UserDropdown.js";
+import { useSession, signIn, signOut,getSession} from "next-auth/react"
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
@@ -217,6 +218,17 @@ export default function Sidebar() {
                     Register
                   </a>
                 </Link>
+              </li>
+              <li className="items-center">
+              
+                  <a onClick={()=>signOut(  )}
+                    href="#"
+                    className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
+                  >
+                    <i className="fas fa-clipboard-list text-blueGray-300 mr-2 text-sm"></i>{" "}
+                    Log Out
+                  </a>
+               
               </li>
             </ul>
 

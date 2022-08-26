@@ -1,0 +1,22 @@
+
+import {createRestaurant,getRestaurants,updateRestaurant,getRestaurant,getMenu} from 'components/system/firebaseActions';
+import {getSession,get } from 'next-auth/react'
+import {useState} from 'react'
+
+
+export default async function handler(req, res) {
+
+const session =await getSession({req});
+let data = [];
+
+session?"":res.status(403).json({message:'You must be sign in to view the protected content on this page.',});
+
+/** get Restaurant(s) */
+
+const response =await getMenu(req.body);
+
+response.forEach(element => {data=[...data,element.data()]});
+res.status(201).json({message:data});
+
+  }
+  

@@ -1,5 +1,6 @@
 import React from "react";
-
+import { getSession, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 // components
 
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
@@ -8,7 +9,10 @@ import HeaderStats from "components/Headers/HeaderStats.js";
 import FooterAdmin from "components/Footers/FooterAdmin.js";
 
 export default function Admin({ children }) {
-  return (
+  const session = useSession();
+
+session.status=="unauthenticated"?signIn():null;
+return (
     <>
       <Sidebar />
       <div className="relative md:ml-64 bg-blueGray-100">

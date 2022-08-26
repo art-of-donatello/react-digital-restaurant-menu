@@ -48,7 +48,9 @@ export default function Login() {
                     type="button"
                   >
                     <img alt="..." className="w-5 mr-1" src="/img/google.svg" />
+                      <a href="http://localhost:3000/api/auth/callback/google">
                     Google
+                    </a>
                   </button>
                 </div>
                 <hr className="mt-6 border-b-1 border-blueGray-300" />

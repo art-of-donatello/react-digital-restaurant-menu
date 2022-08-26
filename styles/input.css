@@ -1,3 +1,62 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+a,
+#menus button {
+  font-size: 16px;
+  padding: 0;
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  color: blue;
+}
+
+#menus ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#menus ul li {
+  border-bottom: 1px solid #eee;
+  padding: 6px 10px;
+}
+
+.stack-navigation {
+  font-family: Arial, Helvetica, sans-serif;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: white;
+  transform: translateX(100%);
+  transition: 0.3s;
+}
+
+.stack-navigation.is-open {
+  transform: translateX(0);
+}
+
+.stack-navigation.is-active {
+  z-index: 1;
+}
+
+#menus .heading {
+  display: grid;
+  grid-template: "left center right" 60px / 50px 1fr 50px;
+}
+
+#menus .heading button {
+  grid-area: left;
+  align-self: center;
+}
+
+#menus  .heading span {
+  font-size: 20px;
+  font-weight: bold;
+  grid-area: center;
+  text-align: center;
+  align-self: center;
+}
