@@ -12,18 +12,20 @@ export const config = {
 
 const handler = async (req, res) => {
 
-    let status = 201,
-        resultBody = { status: 'ok', message: 'Files were uploaded successfully' };
+  
+       let resultBody = { status: 'ok', message: 'Files were uploaded successfully' };
 
         const form = new formidable.IncomingForm();
         form.parse(req, async function (err, fields, files) {
-          await saveFile(files.file);
-         
+            resultBody.url= await saveFile(files.file);
+            console.log(resultBody)
+            res.status(201).json({resultBody});
         });
 
         const saveFile = async (file) => {
+            
             /* Create directory for uploads */
-        const targetPath = path.join(process.cwd(), `/uploads/`);
+        const targetPath = path.join(process.cwd(), `/public/images/`);
         try {
             await fs.access(targetPath);
         } catch (e) {
@@ -31,13 +33,16 @@ const handler = async (req, res) => {
         }
 
         /* Move uploaded files to directory */
-       
+        try{
             const tempPath = file.filepath;
             await fs.copyFile(tempPath, targetPath + file.originalFilename);
-        
+            return `/images/${file.originalFilename}`;
+        } catch (e) {
+           return '/images/no-image.png';
+        }
           };
 
-    res.status(201).json({resultBody});
+    
 }
 
 export default handler;

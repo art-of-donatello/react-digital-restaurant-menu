@@ -3,107 +3,109 @@ import axios from "axios";
 import {useSelector,useDispatch } from "react-redux";
 import uuid from 'react-uuid'
 import FormData from 'form-data'
+import _ from 'lodash'
+import ProductCard from "./ProductCard";
+import { useStateWithRef,clone,getMenu ,updateMenu,uploadImage,RemoveItem,setmenulist} from "components/utils/utils";
+
+
+
 
 //import {GetRestaurantReal} from 'components/system/firebaseActions'
 export default function CardCreateMenu({restauantId}) {
 
+  const getMenu = async(user) => {
 
- 
-  const getMenu = async() => {
-
-  await axios.post("/api/api/getMenu", {
-      name: "DefaultMenu",user 
-    }).then((res) => {
-      //setmenulist(res.data.menu)
+    await axios.post("/api/api/getMenu", {
+        name: "DefaultMenu",user 
+      }).then((res) => {
+        //setmenulist(res.data.menu)
      
-      setmenulist(res.data.message[0].menu.menulist)
-      
-     setMenu(list_to_tree(res.data.message[0].menu.menulist)) ;
-
-    }).catch((err) => {
-      console.log(err)
-    })
-
-  }
-
-const updateMenu = async(menulist) => {
-
-  const data  = {
-    menu:{menulist},
-    name:"DefaultMenu"
-  }
+        setmenulist(res.data.message[0].menu.menuliste)
+        
+        setMenu(list_to_tree( clone(menulistRef.current) )) ;
   
-  await axios.post("/api/api/menuupdate",{data,user}).then();
-}
+      }).catch((err) => {
+        console.log(err)
+      })
+  
+    }
+
 
 
   const inputRef = useRef(null);
+  const scrollref = useRef();
   const user = useSelector(state => state.user);
   const [showModal, setShowModal] = useState(0);
- 
+  const [showItem,setShowItem] = useState({item:{id:""}});
+  const [menu,setMenu,menuRef] = useStateWithRef([]);
+  const [menulist,setmenulist,menulistRef] =useStateWithRef([]);
 
-  const [menu,setMenu] = useState([]);
-  const [menulist,setmenulist] =useState([]);
-  const [currenParent,setcurrenParent] = useState({oldParent:"0",newParent:"0"});
-
+  const [adres,setAdres,currentAdres] = useStateWithRef([]);
+  
   const handle= async()=>{
+    await getMenu(user)
+
+    setmenulist(menulist)
+            
+    setMenu(list_to_tree( clone(menulistRef.current) )) ;
+    
     setShowModal(true);
-    getMenu()
+    
   }
 
 
 
-  const RemoveItem=(id,liste,e)=>{
-    e.preventDefault();
-    const tempMenu = [...menulist];
-    const index = tempMenu.findIndex(x => x.id === id);
-    tempMenu.splice(index, 1);
-
-    setmenulist(tempMenu)
-  }
-
-const updateItem=(id,liste,e)=>{
-  e.preventDefault();
-  const tempMenu = [...menulist];
-  const index = tempMenu.findIndex(x => x.id === id);
-  tempMenu[index].text = e.target.name.value;
-  setmenulist(tempMenu)
-}
 
 
-  const uploadImage = async(file) => {
-    let data = new FormData();
 
-  const body = new FormData();
-  body.append("file", file);
-  const response = await fetch("/api/api/uploadimage", {
-    method: "POST",
-    body
-  });
 
-return () => {
-
-""
-};}
 
   
-
-
-  const AddItem=async(id=0,liste,e)=>{
-   
-    let counter=0;
+  const UpdateItem=async(id,liste,e)=>{
     e.preventDefault();
   
     const veri=e.target.name.value;
     const description=e.target.description.value;
     const price=e.target.price.value;
-    console.log(e.target)
-    const image= await uploadImage(e.target.file.files[0]);
+    const imageFile=e.target.file.files[0];
+    const image=imageFile==undefined?"":await uploadImage(imageFile);
 
-    setmenulist([...menulist,
+  menulist.map((item)=>{
+    if(item.id===id){
+      item.parentId=item.parentId;
+     veri==""?null: item.text=veri;
+     description==""?null: item.description=description;
+     price==""?null:item.price=price;
+     image==""?null:item.image=image;
+     
+    }
+   
+  })
+  
+      setmenulist(menulist);
+     
+      updateMenu(menulistRef.current)
+      ShowAlt(currentAdres.current.at(-1));
+
+  }
+
+  const AddItem=async(itemid=0,liste,e)=>{
+   
+
+    e.preventDefault();
+  
+    const veri=e.target.name.value;
+    const description=e.target.description.value;
+    const price=e.target.price.value;
+
+    const imageFile=e.target.file.files[0];
+    const image=imageFile==undefined?"":await uploadImage(imageFile);
+   
+  
+   setmenulist([...menulist,
       {
         id:uuid(),
-        parentId:id,
+        parentId:itemid,
         text:veri,
         description:description,
         price:price,
@@ -112,10 +114,12 @@ return () => {
         price:0,
         children:null
       }])
-  
-  
- 
-    ShowAlt(id);
+    
+    
+      
+     
+      updateMenu(menulistRef.current)
+
   
 } 
 
@@ -138,40 +142,47 @@ function list_to_tree(list) {
       roots.push(node);
     }
   }
+  
   return roots;
 }
 
+const executeScroll = () => scrollref.current.scrollIntoView()
+
+useEffect(()=>{
+  getMenu(user);
+
+  setmenulist(menulist)
+            
+  setMenu(list_to_tree( clone(menulistRef.current) )) ;
+  
+  ShowAlt("0");
+  
+},[])
 
 useEffect(()=>{
 
 
-  //menulist.length>0?ShowAlt(currenParent.newParent):null;
+  menulist.length>0?setMenu(list_to_tree( clone(menulist))):null;
 
+  ShowAlt(currentAdres.current.at(-1));
 
-
-  menulist.length>0?ShowAlt(currenParent.newParent):null;
-
-  //ShowAlt(currenParent.newParent)
-  //updateMenu(menulist);
-  updateMenu(menulist)
   
 },[menulist])
 
 
-useEffect(()=>{
-  getMenu();
-
-  
-},[])
+const ShowUp=()=>{
+  /*** Remove from adress line move to upper page */
+const upIndex=adres.at(-2);
+setAdres(adres.slice(0, -2));
+ShowAlt(upIndex);
+}
 
 const ShowAlt=(parent)=>{
 
-const temp = list_to_tree(menulist);
+  /*** Move to Current Page or Selected Page */
+const temp =list_to_tree( clone(menulist));
+currentAdres.current.at(-1)!==parent?setAdres([...currentAdres.current,parent]):null;
 
-setcurrenParent({oldParent:menu.length<1?"0":menu[0].parentId,newParent:parent});
-setMenu(RecursiveAlt(parent,temp))
-
-}
 
 const RecursiveAlt=(parent,temp,tempm=[])=>{
 
@@ -188,14 +199,19 @@ const RecursiveAlt=(parent,temp,tempm=[])=>{
  return tempm;
 }
 
+setMenu(RecursiveAlt(parent,temp))
+
+const tempParent=menu.length<1?"0":menu[0].parentId
+
+
+//setcurrenParent({oldParent:tempParent,newParent:parent})
+
+}
 
 
 
-useEffect(()=>{
 
 
-
-},[menu])
 
   function OpenMneu({listeler}){
 
@@ -204,23 +220,31 @@ useEffect(()=>{
 <>
  
 {  
-listeler.map((item) => item.children.length>0? (
-  <div key={item.id} className="flex justify-center  pt-4">
+listeler.map((item) => item.children.length>0&&currentAdres.current.at(-1)==item.parentId? (
+  <div key={item.id} className="flex justify-center text-slate-900  pt-4">
 
-    <ul key={item.id+"a"} className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900 ">
-        <li key={item.id+"s"} onClick={()=>ShowAlt(item.id)} className="px-6 py-2 border-b  border-gray-200 w-full rounded-t-lg"><button className=" w-full hover:bg-orange-300 rounded">{item.text}  </button></li>
-        <li key={item.id+"b"} className="px-6 py-2 border-b border-gray-200  w-full rounded-t-lg">
-                    <form  onSubmit={(e)=>AddItem(item.id,menu,e)}>
+    <ul key={item.id+"a"} className="rounded-lg border text-slate-900   border-gray-200 w-96 ">
+        
+        <li key={item.id+"b"} className="px-6 py-2 flex flex-1 flex-col items-center  border-b border-gray-200  w-full rounded-t-lg">
+        <ProductCard item={item}></ProductCard>
+        <button onClick={()=>{ShowAlt(item.id);executeScroll()}} type="submit" className=" p-1 m-1 text-white bg-pink-500 justify-center self-center w-auto hover:bg-orange-300 rounded">Create Sub</button> 
+        <button type="button" className="bg-pink-500 p-1 m-1 text-white justify-center self-center hover:bg-orange-300 rounded" onClick={(e)=>RemoveItem(item.id,menu,e)} >Remove </button> 
+        <li key={item.id+"s"} onClick={()=>ShowAlt(item.id)} className="bg-pink-500 p-1 m-1 text-white justify-center  self-center hover:bg-orange-300 rounded"><button className="  hover:bg-orange-300 rounded"> Sub Products </button></li> 
+            <div> 
+              <button type="submit" onClick={()=>setShowItem({...setShowItem,item})} className={showItem.item.id==item.id?"hidden":"bg-pink-500 p-1 m-1 text-white justify-center self-center hover:bg-orange-300 rounded"}  >Update </button>
+               
+                <div className={showItem.item.id==item.id?"":"hidden"}>
+                    <form  onSubmit={(e)=>UpdateItem(item.id,menu,e)}>
                         <input ref={inputRef} placeholder="New Product" name="name" className={"s"+item.id+ "bg-gray-50  mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} type="text"></input>
                         <input ref={inputRef} placeholder="Description" name="description" className={"s"+item.id+ "bg-gray-50  mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} type="text"></input>
                         <input ref={inputRef} placeholder="Price" name="price" className={"s"+item.id+ "bg-gray-50  mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} type="text"></input>
                         
                         <input ref={inputRef} type="file" name="file" className={"s"+item.id+ "bg-gray-50 mt-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} ></input>
                         
-                         <button type="submit" className=" w-full hover:bg-orange-300 rounded" >Add Item to {item.text}</button> 
+                         <button type="submit"  className="bg-pink-500 p-1 m-1 text-white justify-center self-center hover:bg-orange-300 rounded" >Update </button> 
                     </form>
-   
-   
+                    </div>
+                    </div>
         </li>
   
           <OpenMneu listeler={item.children}></OpenMneu> 
@@ -230,13 +254,30 @@ listeler.map((item) => item.children.length>0? (
 
 ):(
 
-  <div key={item.id} className={currenParent.newParent==item.parentId?"flex justify-center pt-4":"hidden "}>
+  <div key={item.id} className={currentAdres.current.at(-1)==item.parentId?"flex justify-center pt-4":"hidden "}>
     <ul key={item.id+"a"} className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900  ">
-      <li key={item.id+"c"}  className={currenParent.newParent==item.parentId?" px-6 py-2 border-b border-gray-200 w-full rounded-t-lg":"hidden "} > {item.text} <br/>
+      <li key={item.id+"c"}  className="flex flex-1 flex-col items-center px-6 py-2 border-b border-gray-200 w-full rounded-t-lg" > 
+      <ProductCard item={item}></ProductCard>
+ 
+      <button onClick={()=>{ShowAlt(item.id);executeScroll()}} type="submit" className=" p-1 m-1 text-white bg-pink-500 justify-center self-center w-auto hover:bg-orange-300 rounded">Create Sub </button> 
+      <button type="button" className="bg-pink-500 p-1 m-1 text-white justify-center self-center hover:bg-orange-300 rounded" onClick={(e)=>RemoveItem(item.id,menu,e)} >Remove </button> 
       
-  
-      <button onClick={()=>ShowAlt(item.id)} type="submit" className=" w-full hover:bg-orange-300 rounded">Create Sub {item.text+" "}</button> 
-      <button type="button" onClick={(e)=>RemoveItem(item.id,menu,e)} >Remove {item.text}</button> 
+      <div> 
+              <button type="submit" onClick={()=>setShowItem({...setShowItem,item})} className={showItem.item.id==item.id?"hidden":"bg-pink-500 p-1 m-1 text-white justify-center self-center hover:bg-orange-300 rounded"}  >Update </button>
+                
+                <div className={showItem.item.id==item.id?"":"hidden"}>
+                    <form  onSubmit={(e)=>UpdateItem(item.id,menu,e)}>
+                        <input ref={inputRef} placeholder="New Product" name="name" className={"s"+item.id+ "bg-gray-50  mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} type="text"></input>
+                        <input ref={inputRef} placeholder="Description" name="description" className={"s"+item.id+ "bg-gray-50  mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} type="text"></input>
+                        <input ref={inputRef} placeholder="Price" name="price" className={"s"+item.id+ "bg-gray-50  mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} type="text"></input>
+                        
+                        <input ref={inputRef} type="file" name="file" className={"s"+item.id+ "bg-gray-50 mt-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} ></input>
+                        
+                         <button type="submit"  className="bg-pink-500 p-1 m-1 text-white justify-center self-center hover:bg-orange-300 rounded" >Update </button> 
+                    </form>
+                    </div>
+                    </div>
+      
       </li>
     </ul>
  </div>)
@@ -285,16 +326,16 @@ listeler.map((item) => item.children.length>0? (
                 {/*body*/}
                 <div className="relative p-6 flex-auto w-auto w-full  max-w-sm justify-center self-center">
                     {/*form*/}
-                    { currenParent.newParent!=0? (
-                    <button onClick={()=>ShowAlt(currenParent.oldParent)}>Back</button>
-                    ):null}
-                    <OpenMneu  listeler={menu} />
-                    
                     
 
-                  <hr/>
-                  <div className="flex justify-center self-center items-center max-w-sm pt-5">
-                    <form  onSubmit={(e)=>AddItem(currenParent.newParent,menu,e)}>
+                  
+                    { currentAdres.current.at(-1)!='0'? (
+                    <button onClick={()=>ShowUp()}>Back</button>
+                    ):null}
+                    
+                    
+                  <div ref={scrollref} id="newItem" className="flex flex-1 flex-col items-center px-6 py-2 border-b border-gray-200 w-full rounded-t-lg border-2 pt-5 mt-5">
+                    <form  onSubmit={(e)=>AddItem(currentAdres.current.at(-1),menu,e)} className="flex flex-1 flex-col items-center self-center">
                   
                         <input ref={inputRef} placeholder="New Product" name="name" className={ "bg-gray-50  mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} type="text"></input>
                         <input ref={inputRef} placeholder="Description" name="description" className={"bg-gray-50  mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} type="text"></input>
@@ -303,9 +344,16 @@ listeler.map((item) => item.children.length>0? (
                         <input ref={inputRef} type="file" name="file" className={"bg-gray-50 mt-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} ></input>
                         
                        
-                                     <button  className=" w-full hover:bg-orange-300 rounded" type="submit" >New Main Item </button> 
+                                     <button  className="bg-pink-500 p-1 m-1 text-white justify-center self-center items-center hover:bg-orange-300 rounded" type="submit" >New Main Item </button> 
                     </form>
                     </div>
+
+                    <OpenMneu  listeler={menuRef.current} />
+                    
+                    
+
+                  <hr/>
+                
                     
 
 
