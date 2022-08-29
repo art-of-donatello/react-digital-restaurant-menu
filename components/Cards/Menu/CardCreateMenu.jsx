@@ -4,14 +4,14 @@ import {useSelector,useDispatch } from "react-redux";
 import uuid from 'react-uuid'
 import FormData from 'form-data'
 import _ from 'lodash'
-import ProductCard from "./ProductCard";
+import ProductCard from "../ProductCard";
 import { useStateWithRef,clone,getMenu ,uploadImage,RemoveItem,setmenulist,updateMenu} from "components/utils/utils";
 
 
 
 
 //import {GetRestaurantReal} from 'components/system/firebaseActions'
-export default function CardCreateMenu({restauantId=null,id=null}) {
+export default function CardCreateMenu({restaurantid=null,id=null,name='Default Menu',showModal,setShowModal}) {
 
 
 
@@ -46,26 +46,23 @@ export default function CardCreateMenu({restauantId=null,id=null}) {
   const inputRef = useRef(null);
   const scrollref = useRef();
   const user = useSelector(state => state.user);
-  const [showModal, setShowModal] = useState(0);
+
   const [showItem,setShowItem] = useState({item:{id:""}});
   const [menu,setMenu,menuRef] = useStateWithRef([]);
   const [menulist,setmenulist,menulistRef] =useStateWithRef([]);
 
   const [adres,setAdres,currentAdres] = useStateWithRef([]);
-  
+  const info ={
+    id:id,
+    restaurant:restaurantid,
+  }
   const handle= async()=>{
-    await getMenu(user,setmenulist,setMenu,menulistRef)
+    await getMenu(user,setmenulist,setMenu,menulistRef,"",info)
 /*
     setmenulist(menulist)
             
     setMenu(list_to_tree( clone(menulistRef.current) )) ;
 */
-  
-
-
-    
-   
-
     setShowModal(true);
 
     
@@ -102,7 +99,7 @@ export default function CardCreateMenu({restauantId=null,id=null}) {
   
       setmenulist(menulist);
      
-      updateMenu(menulistRef.current,user)
+      updateMenu(menulistRef.current,user,name,info)
       ShowAlt(currentAdres.current.at(-1));
 
   }
@@ -134,7 +131,7 @@ export default function CardCreateMenu({restauantId=null,id=null}) {
       }]):null
     
      
-      updateMenu(menulistRef.current,user)
+      updateMenu(menulistRef.current,user,name,info)
 
   executeScroll();
 } 
@@ -166,7 +163,7 @@ const executeScroll = () => scrollref.current.scrollIntoView()
 
 
 useEffect(()=>{
-  getMenu(user,setmenulist,setMenu,menulistRef);
+  getMenu(user,setmenulist,setMenu,menulistRef,"",info);
 
   setmenulist(menulist)
             
@@ -174,7 +171,7 @@ useEffect(()=>{
   
 
   ShowAlt("0");
-
+console.log(info)
   
 },[])
 

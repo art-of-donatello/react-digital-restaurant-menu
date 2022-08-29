@@ -25,24 +25,7 @@ import axios from "axios"
     
 
 
-  const updateMenu = async(menuliste) => {
-
-    const data  = {
-      menu:{menuliste},
-      name:"DefaultMenu"
-    }
-    
-    await axios.post("/api/api/menuupdate",{data,user}).then();
-  }
-  
-  const RemoveItem=(id,liste,e)=>{
-    e.preventDefault();
-    const tempMenu = [...menulist];
-    const index = tempMenu.findIndex(x => x.id === id);
-    tempMenu.splice(index, 1);
-
-    setmenulist(tempMenu)
-  }
+ 
 
 
 const ShowUp=()=>{
@@ -105,9 +88,37 @@ const ShowUp=()=>{
     
     return roots;
   }
+  const updateMenu = async(menuliste,user,name="DefaultMenu",info={id:uuid(),restaurant:null}) => {
+
+    const data  = {
+      menu:{menuliste},
+      id:info.id,
+      restaurant:info.restaurant,
+      name:name
+    }
+    
+   const res =  await axios.post("/api/api/menuupdate",{data,user,info})
+   return res;
+  }
 
 
+  const getMenu = async(user,setmenulist=null,setMenu=null,menulistRef, name="DefaultMenu",info={}) => {
 
+   const res= await axios.post("/api/api/getMenu", {
+        name: name,user, info
+      }).then((res) => {
+        //setmenulist(res.data.menu)
+  
+       setmenulist!=null? setmenulist(res.data.message[0].menu.menuliste):null;
+        
+       setMenu!=null?setMenu(list_to_tree( clone(menulistRef.current) )):null ;
+        
+        return res.data.message
+      }).catch((err) => {
+        console.log(err)
+      })
+  return res;
+    }
 
   const uploadImage = async(file) => {
     let data = new FormData();
@@ -186,4 +197,4 @@ const ShowUp=()=>{
   
 } 
 
-export {useStateWithRef,clone,updateMenu,RemoveItem,ShowUp,ShowAlt,list_to_tree,uploadImage,UpdateItem,AddItem}
+export {useStateWithRef,clone,ShowUp,ShowAlt,list_to_tree,uploadImage,UpdateItem,AddItem,getMenu,updateMenu}

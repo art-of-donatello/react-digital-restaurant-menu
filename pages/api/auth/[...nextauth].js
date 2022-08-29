@@ -49,10 +49,10 @@ export const authOptions =
         },
         
     redirect: async (url, _baseUrl)=>{
-      if (url === '/admin') {
-        return Promise.resolve('/')
+      if (url === '/admin/dashboard') {
+        return Promise.resolve('/admin/dashboard')
       }
-      return  Promise.resolve('/')
+      return  Promise.resolve('/admin/dashboard')
     }
       }
       

@@ -9,6 +9,7 @@ import { collection, addDoc,doc,setDoc,updateDoc,getDoc, getDocs, query, where, 
 import { getStorage, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import { isEmpty } from '@firebase/util';
+import { stringify } from 'postcss';
 
 
 
@@ -63,16 +64,21 @@ const createRestaurant=async(restaurant)=>{
 
     const data={
        
+        id:restaurant.id,
         name:restaurant.name,
-        owner:restaurant.email,
+        owner:[restaurant.email],
         info:{},
     
 }
     try{
       
-            const newres = doc(collection(db, "user/"+restaurant.email+"/restaurant"),restaurant.name);
+            let newres = doc(collection(db, "user/"+restaurant.email+"/restaurant"),restaurant.id);
     
-            const res= await setDoc(newres, data); //addDoc used
+            let res= await setDoc(newres, data); //addDoc used
+
+             newres = doc(collection(db, "restaurants"),restaurant.id);
+    
+             res= await setDoc(newres, data); //addDoc used
     return res;
         }catch(e){
             console.log(e);
@@ -118,7 +124,8 @@ const updateRestaurant=async(data)=>{
 const createMenu = async (data) => {
 
     const menu={
-       
+        id:data.info.id,
+        restaurant:data.info.restaurant,
         name:data.data.name,
         owner:data.user.email,
         menu:data.data.menu,
@@ -126,7 +133,32 @@ const createMenu = async (data) => {
 }
     try{
       
-            const newres = doc(collection(db, "user/"+data.user.email+"/menu"),data.data.name);
+            const newres = doc(collection(db, "user/"+data.user.email+"/menu"),data.info.id);
+    
+            const res= await setDoc(newres, menu); //addDoc used
+    return res;
+        }catch(e){
+            console.log(e);
+            return e;
+    }
+  
+}
+
+const createRestaurantMenu = async (data) => {
+
+    const menu={
+        id:data.info.id,
+        restaurant:data.info.restaurant,
+        name:data.data.name,
+        owner:data.user.email,
+        menu:data.data.menu,
+        url:data.info.url,
+        active:"passive",
+    
+}
+    try{
+      
+            const newres = doc(collection(db, "restaurants/"+data.info.restaurant+"/menu"),data.info.id);
     
             const res= await setDoc(newres, menu); //addDoc used
     return res;
@@ -138,12 +170,36 @@ const createMenu = async (data) => {
 }
 
 const updateMenu = async (data) => {
+    if(data.info.restaurant==null){
     const col  = collection(db, "user/"+data.user.email+"/menu");
     const checkcol = await getDocs(col);
     checkcol.docs.length<1?await createMenu(data):null;
     const res = doc(col,data.data.name);
     const menu={
-       
+        id:data.info.id,
+        name:data.data.name,
+        owner:data.user.email,
+        menu:data.data.menu,
+    
+}
+    const getRes = await updateDoc(res, menu);
+    return getRes;
+}else{
+
+    const col  = collection(db, "restaurants/"+data.info.restaurant+"/menu");
+    //const newQuery = query(col,where('id', "==", "123456"));
+    console.log("burayı sorguladı")
+    const checkcol = await getDocs(col)
+   
+    let passed=checkcol.docs.length<1?false:true;
+  
+    
+   checkcol.forEach(e=>{e.data()==data.info.id?console.log("eşleşti"):passed=false});
+ 
+   passed?null:await createRestaurantMenu(data);
+
+    const res = doc(col,data.info.id);
+    const menu={
         name:data.data.name,
         owner:data.user.email,
         menu:data.data.menu,
@@ -152,15 +208,29 @@ const updateMenu = async (data) => {
     const getRes = await updateDoc(res, menu);
     return getRes;
 }
+    }
 
+   
+const ActivateMenu = async (data) => {
+    const col  = collection(db, "restaurants/"+data.info.restaurant+"/menu");
+    const checkcol = await getDocs(col)
+    console.log(data.info.id)
+   
+    let res="";
+    checkcol.forEach((e)=>{e.data().id==data.info.id?
+     res = updateDoc(doc(col,e.data().id), {"active":"active"})
+    : res = updateDoc(doc(col,e.data().id), {"active":"passive"})})
+    return res;
+}
 const getMenu = async (data) => {
-  
+    console.log(data)
+    if(data.info.restaurant==null){
     const res = collection(db, "user/"+data.user.email+"/menu");
-    const newquery = query(res,where('name', "==", data.name));
+    //const newquery = query(res,where('name', "==", data.name));
     try {
        
     
-    const getRes = await getDocs(res,newquery);
+    const getRes = await getDocs(res);
       
     return getRes;
 
@@ -168,6 +238,24 @@ const getMenu = async (data) => {
       
         return error;
     }
+}else{
+    const res = collection(db, "restaurants/"+data.info.restaurant+"/menu");
+    let newquery="";
+  
+
+    try {
+       
+   
+    const getRes = await getDocsFromServer(res,newquery);
+   
+    return getRes;
+
+    } catch (error) {
+      
+        return error;
+    }
+
+}
 
 }
 
@@ -248,4 +336,4 @@ const Realtime=async()=>{
 }
 
 
-export {setRole,createUser,getUsers,getUser,Realtime,createRestaurant,getRestaurants,updateRestaurant,getRestaurant,GetRestaurantReal,createMenu,updateMenu,getMenu};
+export {setRole,createUser,getUsers,getUser,Realtime,createRestaurant,getRestaurants,updateRestaurant,getRestaurant,GetRestaurantReal,createMenu,updateMenu,getMenu,ActivateMenu};

@@ -1,6 +1,8 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { getSession, useSession } from "next-auth/react";
 import { signIn } from "next-auth/react";
+import { useSelector, useDispatch } from "react-redux";
+import {auth, login} from 'redux/UserSlicer'
 // components
 
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
@@ -9,9 +11,22 @@ import HeaderStats from "components/Headers/HeaderStats.js";
 import FooterAdmin from "components/Footers/FooterAdmin.js";
 
 export default function Admin({ children }) {
-  const session = useSession();
 
-session.status=="unauthenticated"?signIn():null;
+  
+
+  console.log("buaya gelindir")
+const session =  useSession();
+const dispatch = useDispatch();
+console.log(session)
+if(session.status=="authenticated"){
+ const userData = {name:null, email:session?.user?.email, adres:null,csrfToken:""} 
+
+ dispatch(login({email:session?.data?.user?.email,role:"asdasd@asdasd.com",user:session?.data?.user?.email}))
+
+  
+ console.log(session.data)
+    
+
 return (
     <>
       <Sidebar />
@@ -26,4 +41,9 @@ return (
       </div>
     </>
   );
+
+
+}else if(session.status=="unauthenticated"){
+  signIn()
+}
 }

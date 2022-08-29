@@ -14,8 +14,11 @@ session?"":res.status(403).json({message:'You must be sign in to view the protec
 /** get Restaurant(s) */
 
 const response =await getMenu(req.body);
+const id = req.body.info.id;
 
-response.forEach(element => {data=[...data,element.data()]});
+
+id?response.forEach(element => {element.data().id==id?data=[...data,element.data()]:null}):response.forEach(element => {data=[...data,element.data()]});
+console.log(data);
 res.status(201).json({message:data});
 
   }

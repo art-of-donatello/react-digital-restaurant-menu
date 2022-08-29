@@ -34,10 +34,10 @@ reducers:{
 },
 extraReducers:(builder)=> {
     builder.addCase(fetchRestaurants.fulfilled, (state,action) => {
-        // Add user to the state array
+        // Add restaurants to the state array
      
         state.restaurant=action.payload.message;
-        console.log(state.restaurant);
+
       })
 }
 

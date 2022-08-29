@@ -3,33 +3,41 @@ import axios from "axios";
 import {useSelector,useDispatch } from "react-redux";
 import { fetchRestaurants } from 'redux/dataSlicer'
 import uuid from "react-uuid";
+import {updateMenu,getMenu} from'components/utils/utils'
+import { random } from "lodash";
+
 //import {GetRestaurantReal} from 'components/system/firebaseActions'
-export default function Modal() {
+export default function Modal({menus,setMenus,restaurantid}) {
  const dispatch = useDispatch();
  const user = useSelector(state => state.user);
  const [showModal, setShowModal] = React.useState(0);
- const [dataa,setData] = React.useState(user);
+ const [dataa,setData] = React.useState();
 
-  const restaurant =useSelector(state=>state.data.restaurant);
+const restaurant =useSelector(state=>state.data.restaurant);
 
   const handle=()=>{
     setShowModal(true);
-    setData({...dataa,id:uuid()});
+    setData({...dataa});
+  
    
-    console.log(dataa)
   }
 
-
+  function prettyUrl(value)
+  {
+    return value.replace(/ /g, "-").replace(/@/g, "").replace(/\$/g, "").replace(/!/g, "").replace(/#/g, "").toLowerCase();
+  }
 
   const handleSubmit=async(e)=>{
     e.preventDefault();
+    const newurl = prettyUrl(dataa.name+(random(0,100000)));
+    const newid= uuid();
+    setMenus([...menus,{name:dataa.name,restaurant:restaurantid,id:newid,url:newurl}]);
+    getMenu(user).then(res=>{
+    updateMenu(res[0].menu.menuliste,user,dataa.name,{id:newid,restaurant:restaurantid,url:newurl}).then(res=>console.log(res))
+    });
+    const menus1 = getMenu(user,null,null,null,null,{id:null,restaurant:restaurantid}).then();
     
-    await axios.post("/api/api/restaurantcreate",dataa).then(
-
-      dispatch(fetchRestaurants(user)).then("")
-     
-    );
-    console.log(restaurant)
+    
   }
   return (
     <div>
@@ -39,7 +47,7 @@ export default function Modal() {
        
       <button type="button"
         className="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" onClick={() => handle()} >
-        Create New Restaurant
+        Create New Menu
       </button>
       </div>
       </div>
@@ -54,7 +62,7 @@ export default function Modal() {
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                   <h3 className="text-3xl font-semibold">
-                  Create New Restaurant
+                  Create New Menu
                   </h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -70,13 +78,10 @@ export default function Modal() {
                     {/*form*/}
                     <form className="flex flex-col" onSubmit={handleSubmit}>
                           <div className="mb-6">
-                            <label  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Restaurant Name</label>
+                            <label  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Menu Name</label>
                             <input onChange={(e)=>setData({...dataa,name:e.target.value})} type="text" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@flowbite.com" required/>
                           </div>
-                          <div className="mb-6">
-                            <label  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Adress</label>
-                            <input onChange={(e)=>setData({...dataa,adres:e.target.value})}  type="text" id="adress" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
-                          </div>
+                     
                         
                           
                     </form>
