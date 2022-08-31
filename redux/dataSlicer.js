@@ -6,7 +6,7 @@ export const fetchRestaurants = createAsyncThunk(
     async (user, thunkAPI) => {
   
       const response = await axios.post("/api/api/restaurantget",user)
-      console.log(response)
+      
       return response.data
     }
   )

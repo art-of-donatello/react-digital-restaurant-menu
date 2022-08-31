@@ -19,6 +19,7 @@ import axios from "axios"
   
     const clone=(dataref)=>{
       const veri =dataref.map( (child)=>_.clone(child )) ;
+      
       return veri;
     }
     

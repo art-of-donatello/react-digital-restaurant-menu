@@ -18,16 +18,7 @@ export default function CardRestaurantsModal() {
   //const [restaurant,setRestaurant] = React.useState([]);
 
  
-  useEffect(() => {
   
-    dispatch(fetchRestaurants(user)).then("")
-     }, []);
-
-  console.log(user)
-const updateMenu = (id) => {
-console.log(id)
-
-}
 
 
 

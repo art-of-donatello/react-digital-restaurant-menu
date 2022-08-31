@@ -6,12 +6,10 @@ import {getMenu} from 'components/utils/utils'
 import Link from "next/link";
 import CardCreateMenu from "components/Cards/Menu/CardCreateMenu";
 
-const getMenus =async (restaurantId)=>{
-const menus = await getMenu(user,"","","","",info={id:null,restaurant:restaurantId})
 
-}
 
 export default function CardRestaurantsModal({menus,setMenus,restaurantid}) {
+
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const session = useSession();

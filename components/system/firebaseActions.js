@@ -10,6 +10,7 @@ import { getStorage, uploadBytesResumable, getDownloadURL } from "firebase/stora
 
 import { isEmpty } from '@firebase/util';
 import { stringify } from 'postcss';
+import { random } from 'lodash';
 
 
 
@@ -59,6 +60,11 @@ console.log(user);
 
 }
 
+function prettyUrl(value)
+{
+  return value.replace(/ /g, "-").replace(/@/g, "").replace(/\$/g, "").replace(/!/g, "").replace(/#/g, "").toLowerCase();
+}
+
 
 const createRestaurant=async(restaurant)=>{
 
@@ -68,6 +74,7 @@ const createRestaurant=async(restaurant)=>{
         name:restaurant.name,
         owner:[restaurant.email],
         info:{},
+        url:prettyUrl(restaurant.name+( random())),
     
 }
     try{
@@ -98,7 +105,7 @@ const getRestaurants=async(data)=>{
    
     return getRes;
 } catch (error) {
-    console.log(error);
+   
     return error;
 }
 
@@ -160,7 +167,7 @@ const createRestaurantMenu = async (data) => {
       
             const newres = doc(collection(db, "restaurants/"+data.info.restaurant+"/menu"),data.info.id);
     
-            const res= await setDoc(newres, menu); //addDoc used
+            const res= await setDoc(newres, menu,{merge:true}); //addDoc used
     return res;
         }catch(e){
             console.log(e);
@@ -174,7 +181,8 @@ const updateMenu = async (data) => {
     const col  = collection(db, "user/"+data.user.email+"/menu");
     const checkcol = await getDocs(col);
     checkcol.docs.length<1?await createMenu(data):null;
-    const res = doc(col,data.data.name);
+    const id = checkcol.docs[0].data().id
+    const res = doc(col,id);
     const menu={
         id:data.info.id,
         name:data.data.name,
@@ -194,7 +202,7 @@ const updateMenu = async (data) => {
     let passed=checkcol.docs.length<1?false:true;
   
     
-   checkcol.forEach(e=>{e.data()==data.info.id?console.log("eşleşti"):passed=false});
+   checkcol.forEach(e=>{e.data().id==data.info.id?console.log("eşleşti"):passed=false});
  
    passed?null:await createRestaurantMenu(data);
 
@@ -205,7 +213,7 @@ const updateMenu = async (data) => {
         menu:data.data.menu,
     
 }
-    const getRes = await updateDoc(res, menu);
+    const getRes = await updateDoc(res, menu,{merge:true});
     return getRes;
 }
     }
@@ -223,7 +231,7 @@ const ActivateMenu = async (data) => {
     return res;
 }
 const getMenu = async (data) => {
-    console.log(data)
+    
     if(data.info.restaurant==null){
     const res = collection(db, "user/"+data.user.email+"/menu");
     //const newquery = query(res,where('name', "==", data.name));
@@ -258,6 +266,38 @@ const getMenu = async (data) => {
 }
 
 }
+const getUrlMenu = async (data) => {
+  
+
+    const res = collection(db, "restaurants");
+    let newquery = query(res,where('url', "==", data));
+  
+    try {
+        const getRes = await getDocsFromServer(res,newquery);
+        //const id= getRes.docs[0].data().id;
+        let id =0;
+        getRes.forEach(e=>
+            e.data().url==data?id=e.data().id:null
+            );
+       
+        const menu = collection(db, "restaurants/"+id+"/menu");
+        newquery = query(menu,where('active', "==", "active"));
+
+        const getMenu = await getDocsFromServer(menu,newquery);
+   
+        return getMenu.docs[0].data().menu;
+   
+   // const getRes = await getDocsFromServer(res,newquery);
+   
+    return getRes;
+
+    } catch (error) {
+      
+        return error;
+    }
+
+}
+
 
 
 
@@ -336,4 +376,4 @@ const Realtime=async()=>{
 }
 
 
-export {setRole,createUser,getUsers,getUser,Realtime,createRestaurant,getRestaurants,updateRestaurant,getRestaurant,GetRestaurantReal,createMenu,updateMenu,getMenu,ActivateMenu};
+export {getUrlMenu,setRole,createUser,getUsers,getUser,Realtime,createRestaurant,getRestaurants,updateRestaurant,getRestaurant,GetRestaurantReal,createMenu,updateMenu,getMenu,ActivateMenu};

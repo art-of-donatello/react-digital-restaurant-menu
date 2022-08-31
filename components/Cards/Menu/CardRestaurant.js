@@ -12,7 +12,7 @@ const [menus,setMenus,menusRef] = useStateWithRef([]);
 const user = useSelector(state => state.user);
 const restaurant = restaurants.find(restaurant=>restaurant.id==restaurantid)
 
-console.log(restaurant);
+
 
 
 useEffect(()=>{
@@ -25,11 +25,8 @@ useEffect(()=>{
 
 
 
-console.log(restaurants)
-if (restaurant==undefined) {
 
-location.href='/admin/dashboard';
-}else {
+
   return (
 
 
@@ -40,6 +37,6 @@ location.href='/admin/dashboard';
     </div>
   )
 } 
-}
+
 
 export default CardRestaurant

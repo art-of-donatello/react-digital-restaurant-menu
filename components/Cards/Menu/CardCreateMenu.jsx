@@ -17,13 +17,14 @@ export default function CardCreateMenu({restaurantid=null,id=null,name='Default 
 
 
    const uploadImage = async(file) => {
-    let data = new FormData();
+ 
 
   const body = new FormData();
-  body.append("file", file);
-  const response = await axios.post("/api/api/uploadimage", body);
+  body.append("file", file, file.name);
 
- 
+const response = await axios.post("/api/api/uploadimage", body
+  ).then(console.log("ceva p alın"));
+
   return response.data?.resultBody?.url;
 }
 
@@ -35,8 +36,9 @@ export default function CardCreateMenu({restaurantid=null,id=null,name='Default 
     const tempMenu = [...menulist];
     const index = tempMenu.findIndex(x => x.id === id);
     tempMenu.splice(index, 1);
-
+    
     setmenulist(tempMenu)
+    updateMenu(menulistRef.current,user,name,info)
   }
 
 
@@ -108,7 +110,7 @@ export default function CardCreateMenu({restaurantid=null,id=null,name='Default 
    
 
     e.preventDefault();
-  
+    
     const veri=e.target.name.value;
     const description=e.target.description.value;
     const price=e.target.price.value;
@@ -171,7 +173,7 @@ useEffect(()=>{
   
 
   ShowAlt("0");
-console.log(info)
+
   
 },[])
 
@@ -181,7 +183,8 @@ useEffect(()=>{
   menulist.length>0?setMenu(list_to_tree( clone(menulist))):null;
 
   ShowAlt(currentAdres.current.at(-1));
-
+  console.log(menulistRef.current)
+  console.log(menuRef.current)
   
 },[menulist])
 
@@ -246,7 +249,7 @@ listeler.map((item) => item.children.length>0&&currentAdres.current.at(-1)==item
         <li key={item.id+"b"} className="px-6 py-2 flex flex-1 flex-col items-center  border-b border-gray-200  w-full rounded-t-lg">
         <ProductCard item={item}></ProductCard>
         <button onClick={()=>{ShowAlt(item.id);executeScroll()}} type="submit" className=" p-1 m-1 text-white bg-pink-500 justify-center self-center w-auto hover:bg-orange-300 rounded">Create Sub</button> 
-        <button type="button" className="bg-pink-500 p-1 m-1 text-white justify-center self-center hover:bg-orange-300 rounded" onClick={(e)=>RemoveItem(item.id,menu,e)} >Remove </button> 
+
          </li>
 
         <li  className="px-6 py-2 flex flex-1 flex-col items-center  border-b border-gray-200  w-full rounded-t-lg" key={item.id+"s"} onClick={()=>ShowAlt(item.id)} ><button className="bg-pink-500 p-1 m-1 text-white justify-center  self-center hover:bg-orange-300 rounded"> Sub Products </button></li> 
@@ -258,9 +261,9 @@ listeler.map((item) => item.children.length>0&&currentAdres.current.at(-1)==item
                     <form  onSubmit={(e)=>UpdateItem(item.id,menu,e)}>
                         <input ref={inputRef} placeholder="New Product" name="name" className={"s"+item.id+ "bg-gray-50  mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} type="text"></input>
                         <input ref={inputRef} placeholder="Description" name="description" className={"s"+item.id+ "bg-gray-50  mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} type="text"></input>
-                        <input ref={inputRef} placeholder="Price" name="price" className={"s"+item.id+ "bg-gray-50  mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} type="text"></input>
+                        <input  placeholder="Price" name="price" className={"s"+item.id+ "bg-gray-50  mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} type="text"></input>
                         
-                        <input ref={inputRef} type="file" name="file" className={"s"+item.id+ "bg-gray-50 mt-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} ></input>
+                        <input type="file" name="file" className={"s"+item.id+ "bg-gray-50 mt-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} ></input>
                         
                          <button type="submit"  className="bg-pink-500 p-1 m-1 text-white justify-center self-center hover:bg-orange-300 rounded" >Update </button> 
                     </form>
