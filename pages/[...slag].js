@@ -54,7 +54,7 @@ const data=useRouter();
 
 
 
-const url= data.query.slag.reduce((a,b)=>a+"/"+b);
+
 
 
 useEffect(() => {
@@ -74,7 +74,7 @@ useEffect(() => {
 
 return (<>
 {loading?(<div>Loading</div>):
-(<CardProduct menu={menu} url={url}/>)
+(<CardProduct menu={menu} url={data.query.slag}/>)
 }
 </>)
 
