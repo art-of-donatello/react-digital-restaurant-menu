@@ -138,10 +138,11 @@ const createMenu = async (data) => {
         menu:data.data.menu,
     
 }
+console.log(menu)
     try{
       
-            const newres = doc(collection(db, "user/"+data.user.email+"/menu"),data.info.id);
-    
+            const newres = doc(collection(db, "user/"+data.user.email+"/menu"),menu.id);
+            
             const res= await setDoc(newres, menu); //addDoc used
     return res;
         }catch(e){
@@ -178,11 +179,14 @@ const createRestaurantMenu = async (data) => {
 
 const updateMenu = async (data) => {
     if(data.info.restaurant==null){
+        
     const col  = collection(db, "user/"+data.user.email+"/menu");
     const checkcol = await getDocs(col);
-    checkcol.docs.length<1?await createMenu(data):null;
-    let id = 0;
-    checkcol.forEach((doc) => {id=doc.data().id});
+ 
+    let id = "";
+    checkcol.docs.length<1?await createMenu(data):"";
+    id=data.info.id
+    
     const res = doc(col,id);
     const menu={
         id:data.info.id,

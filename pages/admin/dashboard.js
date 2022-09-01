@@ -32,7 +32,7 @@ export default function Dashboard() {
         <Modal  />
         <Restaurant />
        
-        <CardCreateMenu />
+        
        
         </div>
       </div>

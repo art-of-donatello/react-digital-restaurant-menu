@@ -11,7 +11,7 @@ import { useStateWithRef,clone,getMenu ,uploadImage,RemoveItem,setmenulist,updat
 
 
 //import {GetRestaurantReal} from 'components/system/firebaseActions'
-export default function CardCreateMenu({restaurantid=null,id=null,name='Default Menu',showModal,setShowModal}) {
+export default function CardCreateMenu({restaurantid=null,Menuid='12345',name='Default Menu',showModal,setShowModal}) {
 
 
 
@@ -55,7 +55,7 @@ const response = await axios.post("/api/api/uploadimage", body
 
   const [adres,setAdres,currentAdres] = useStateWithRef([]);
   const info ={
-    id:id,
+    id:Menuid,
     restaurant:restaurantid,
   }
   const handle= async()=>{

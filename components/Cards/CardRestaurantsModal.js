@@ -25,7 +25,7 @@ export default function CardRestaurantsModal() {
   return (
         <>
         {showModal?<CardCreateMenu  showModal={showModal} setShowModal={setShowModal}  />:null}
-        <button onClick={()=>setShowModal(!showModal)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">asdasdasd</button>
+        <button onClick={()=>setShowModal(!showModal)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Create Default Menu</button>
           <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
             <div className="rounded-t mb-0 px-4 py-3 border-0">
               <div className="flex flex-wrap items-center">
