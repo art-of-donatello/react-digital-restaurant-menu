@@ -6,7 +6,7 @@ import {useState} from 'react'
 
 export default async function handler(req, res) {
 
-const session =await getSession({req});
+
 let data = [];
 
 session?"":res.status(403).json({message:'You must be sign in to view the protected content on this page.',});
