@@ -2,11 +2,11 @@ import {app,db,stograge } from 'components/system/firebase'
 
 import { getAuth} from "firebase/auth";
 
-import { get, getDatabase, ref, set } from "firebase/database";
+
 
 import { collection, addDoc,doc,setDoc,updateDoc,getDoc, getDocs, query, where, onSnapshot,getDocsFromServer, orderBy } from "firebase/firestore";
 
-import { getStorage, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import { isEmpty } from '@firebase/util';
 import { stringify } from 'postcss';
@@ -181,7 +181,8 @@ const updateMenu = async (data) => {
     const col  = collection(db, "user/"+data.user.email+"/menu");
     const checkcol = await getDocs(col);
     checkcol.docs.length<1?await createMenu(data):null;
-    const id = checkcol.docs[0].data().id
+    let id = 0;
+    checkcol.forEach((doc) => {id=doc.data().id});
     const res = doc(col,id);
     const menu={
         id:data.info.id,
@@ -378,5 +379,18 @@ const Realtime=async()=>{
     
 }
 
+const uploadImage = async (file) => {
 
-export {getUrlMenu,setRole,createUser,getUsers,getUser,Realtime,createRestaurant,getRestaurants,updateRestaurant,getRestaurant,GetRestaurantReal,createMenu,updateMenu,getMenu,ActivateMenu};
+    
+    const storageRef = ref(stograge, 'images/' + file.originalFilename);
+    console.log(file)
+    // Upload the file and metadata
+    const uploadTask = await uploadBytesResumable(storageRef, file);
+
+}
+const getImage = (file) => {
+
+}
+
+
+export {uploadImage,getUrlMenu,setRole,createUser,getUsers,getUser,Realtime,createRestaurant,getRestaurants,updateRestaurant,getRestaurant,GetRestaurantReal,createMenu,updateMenu,getMenu,ActivateMenu};

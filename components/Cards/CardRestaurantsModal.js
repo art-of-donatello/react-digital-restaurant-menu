@@ -4,6 +4,7 @@ import {getSession, useSession } from "next-auth/react";
 import {useSelector,useDispatch} from "react-redux";
 import { fetchRestaurants } from 'redux/dataSlicer'
 import { updateMenu } from "components/system/firebaseActions";
+import CardCreateMenu from "./Menu/CardCreateMenu";
 import Link from "next/link";
 
 export default function CardRestaurantsModal() {
@@ -11,8 +12,7 @@ export default function CardRestaurantsModal() {
   const session = useSession();
   const user = useSelector(state => state.user);
   const restaurant =useSelector(state=>state.data.restaurant);
-
-
+ 
   const [showModal, setShowModal] = React.useState(0);
   const [dataa,setData] = React.useState({name:null, email:user.email, adres:null,csrfToken:""});
   //const [restaurant,setRestaurant] = React.useState([]);
@@ -24,6 +24,8 @@ export default function CardRestaurantsModal() {
 
   return (
         <>
+        {showModal?<CardCreateMenu  showModal={showModal} setShowModal={setShowModal}  />:null}
+        <button onClick={()=>setShowModal(!showModal)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">asdasdasd</button>
           <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
             <div className="rounded-t mb-0 px-4 py-3 border-0">
               <div className="flex flex-wrap items-center">

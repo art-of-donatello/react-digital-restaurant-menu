@@ -15,6 +15,9 @@ const nextConfig = {
     GOOGLE_CLIENT_ID: "284601990552-66k2rvm6fgh667u8e6ol36gsvafsuvm1.apps.googleusercontent.com",
     
     GOOGLE_CLIENT_SECRET: "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",
+    AWS_ACCESS_KEY_ID: "AKIATZVWWAVE33HSI6GC",
+    AWS_SECRET_ACCESS_KEY: "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",
+    AWS_BUCKET_NAME: "myqrcodeapp",
   },
   
 }
