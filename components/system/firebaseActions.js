@@ -4,7 +4,7 @@ import { getAuth} from "firebase/auth";
 
 
 
-import { collection, addDoc,doc,setDoc,updateDoc,getDoc, getDocs, query, where, onSnapshot,getDocsFromServer, orderBy } from "firebase/firestore";
+import { collection, addDoc,doc,setDoc,updateDoc,getDoc, getDocs, query, where, onSnapshot,getDocsFromServer, orderBy, deleteDoc } from "firebase/firestore";
 
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
@@ -235,8 +235,17 @@ const ActivateMenu = async (data) => {
     : res = updateDoc(doc(col,e.data().id), {"active":"passive"})})
     return res;
 }
+
+const deleteMenu = async (data) => {
+
+    const res = doc( collection(db, "restaurants/"+data.info.restaurant+"/menu"),data.info.id);
+
+    const result = deleteDoc(res);
+return result;
+}
+
 const getMenu = async (data) => {
-    
+    console.log(data)
     if(data.info.restaurant==null){
     const res = collection(db, "user/"+data.user.email+"/menu");
     //const newquery = query(res,where('name', "==", data.name));
@@ -397,4 +406,4 @@ const getImage = (file) => {
 }
 
 
-export {uploadImage,getUrlMenu,setRole,createUser,getUsers,getUser,Realtime,createRestaurant,getRestaurants,updateRestaurant,getRestaurant,GetRestaurantReal,createMenu,updateMenu,getMenu,ActivateMenu};
+export {deleteMenu,uploadImage,getUrlMenu,setRole,createUser,getUsers,getUser,Realtime,createRestaurant,getRestaurants,updateRestaurant,getRestaurant,GetRestaurantReal,createMenu,updateMenu,getMenu,ActivateMenu};

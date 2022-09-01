@@ -31,16 +31,32 @@ return restaurants.filter((e)=>e.id===restaurantid)[0].url
 
 }
 
+const DeleteMenu = async(id,name) => {
+console.log(id+" "+name)
+  let newMenu = await axios.post("/api/api/menuDelete",{user,info:{id:id,restaurant:restaurantid}}).then(res=>console.log(res))
+  newMenu = getMenu(user,null,null,null,null,{id:null,restaurant:restaurantid}).then(res=>setMenus(res));
+  setMenus(newMenu);
+ 
+  
+
+
+}
+
 const activate = async(id,restaurantid) =>{
 
   
-  await axios.post("/api/api/menuActivate",{user,info:{id:id,restaurant:restaurantid}}).then(res=>console.log(res));
+  await axios.post("/api/api/menuActivate",{user,info:{id:id,restaurant:restaurantid}}).then(
+    res=>console.log(res)
+    
+    );
+    let newMenu = getMenu(user,null,null,null,null,{id:null,restaurant:restaurantid}).then(res=>setMenus(res));
+    setMenus(newMenu);
 
   }
 
   return (
         <>
-        {showModal?<CardCreateMenu restaurantid={restaurantid} id={selectedMenu.id} showModal={showModal} setShowModal={setShowModal} name={selectedMenu.name} />:null}
+        {showModal?<CardCreateMenu restaurantid={restaurantid} Menuid={selectedMenu.id} showModal={showModal} setShowModal={setShowModal} name={selectedMenu.name} />:null}
           <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
             <div className="rounded-t mb-0 px-4 py-3 border-0">
               <div className="flex flex-wrap items-center">
@@ -87,7 +103,12 @@ const activate = async(id,restaurantid) =>{
                       {menu.name}
                     </th>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                     Denizli
+                    <button
+                    className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"  onClick={()=>DeleteMenu(menu.id,menu.name)}
+                  >
+                    Delete
+                  </button>
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     {menu.active=="active"?(<Link href={"/"+restUrl()}>Menu Link</Link>):  (<button onClick={()=>{activate(menu.id,restaurantid)}} className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Activate</button>)}

@@ -31,7 +31,7 @@ useEffect(()=>{
 
 
     <div>
-      <CardNewMenu restaurantid={restaurantid} menus={menus}  setMenus={setMenus} /> 
+      <CardNewMenu restaurantid={restaurantid} menus={menusRef.current}  setMenus={setMenus} /> 
     <CardMenuList menus={menusRef.current} setMenus={setMenus} restaurantid={restaurantid} />
 
     </div>

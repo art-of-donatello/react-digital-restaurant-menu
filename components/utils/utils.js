@@ -113,7 +113,7 @@ const ShowUp=()=>{
        setmenulist!=null? setmenulist(res.data.message[0].menu.menuliste):null;
         
        setMenu!=null?setMenu(list_to_tree( clone(menulistRef.current) )):null ;
-        
+        console.log(res.data.message)
         return res.data.message
       }).catch((err) => {
         console.log(err)

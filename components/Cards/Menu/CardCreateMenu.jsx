@@ -167,7 +167,7 @@ const executeScroll = () => scrollref.current.scrollIntoView()
 useEffect(()=>{
   getMenu(user,setmenulist,setMenu,menulistRef,"",info);
 
-  setmenulist(menulist)
+  setmenulist(menulistRef.current)
             
   setMenu(list_to_tree( clone(menulistRef.current) )) ;
   
@@ -180,7 +180,7 @@ useEffect(()=>{
 useEffect(()=>{
 
 
-  menulist.length>0?setMenu(list_to_tree( clone(menulist))):null;
+  menulistRef.current.length>0?setMenu(list_to_tree( clone(menulist))):null;
 
   ShowAlt(currentAdres.current.at(-1));
   console.log(menulistRef.current)
