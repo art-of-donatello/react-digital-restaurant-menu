@@ -11,16 +11,10 @@ export default function Home() {
 
     const [menu,setMenu]=useState([]);
     const defmenu = useSelector(state => state.menu.menu);
-   
+    const [parent,setParent]=useState(null);
    
 
-    const getMenu = async() => {
-        setLoading(true);
-     const menu =    await axios.post('/api/getMenu', {url:data.query.slag}).then(
-        setLoading(false)
-     )
-     return menu.data.message;
-        };
+
         const createUrl= (id)=>{
 
             const myArray =id.split("-");
@@ -29,7 +23,8 @@ export default function Home() {
         
 
         const createMenu=(url,menu)=>{
-        
+            let parentName = "";
+            
             if(url.length>1){
   
 
@@ -38,15 +33,17 @@ export default function Home() {
                   
                     
                    menu = menu.filter((item)=>item.text+createUrl(item.id)==url[i])
-                  
-                   menu = menu[0].children
-                    
+                   parentName = menu[0].text;
+                   menu = menu[0].children;
+               
+                   
+                   
                     
                 }
-                return menu;
+                return menu
             }
-                
-            return menu;
+         
+            return menu
                 
         }
 const data=useRouter();
@@ -68,13 +65,15 @@ useEffect(() => {
 useEffect(() => {
 
   const res =defmenu.length==0?[]: createMenu(data.query.slag,defmenu)
-
-    setMenu(res)
+  
+   setMenu(res)
+  
+    
 } , [defmenu])
 
 return (<>
 {loading?(<div>Loading</div>):
-(<CardProduct menu={menu} url={data.query.slag}/>)
+(<CardProduct menu={menu} url={data.query.slag} parent={parent}/>)
 }
 </>)
 

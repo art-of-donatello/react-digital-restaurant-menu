@@ -5,6 +5,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import Link from 'next/link';
 
 function ProductCarousel() {
   return (
@@ -30,7 +31,7 @@ function ProductCarousel() {
             >
            
               <SwiperSlide>
-                <a href="/product/smart-watch" className="block">
+                <Link href="/product/smart-watch" className="block">
                   <div>
                     <p className="text-xs text-indigo-500">
                       Banana
@@ -45,10 +46,10 @@ function ProductCarousel() {
                   <p className="mt-1 text-sm font-medium text-gray-700">
                     $49.99
                   </p>
-                </a>
+                </Link>
                 </SwiperSlide>
                 <SwiperSlide>
-                <a href="/product/smart-watch" className="block">
+                <Link href="/product/smart-watch" className="block">
                   <div>
                     <p className="text-xs text-indigo-500">
                       Banana
@@ -63,10 +64,10 @@ function ProductCarousel() {
                   <p className="mt-1 text-sm font-medium text-gray-700">
                     $49.99
                   </p>
-                </a>
+                </Link>
                 </SwiperSlide>
                 <SwiperSlide>
-                <a href="/product/smart-watch" className="block">
+                <Link href="/product/smart-watch" className="block">
                   <div>
                     <p className="text-xs text-indigo-500">
                       Banana
@@ -81,10 +82,10 @@ function ProductCarousel() {
                   <p className="mt-1 text-sm font-medium text-gray-700">
                     $49.99
                   </p>
-                </a>
+                </Link>
                 </SwiperSlide>
                 <SwiperSlide>
-                <a href="/product/smart-watch" className="block">
+                <Link href="/product/smart-watch" className="block">
                   <div>
                     <p className="text-xs text-indigo-500">
                       Banana
@@ -99,7 +100,7 @@ function ProductCarousel() {
                   <p className="mt-1 text-sm font-medium text-gray-700">
                     $49.99
                   </p>
-                </a>
+                </Link>
                 </SwiperSlide>
      
             <div className="mt-12 swiper-pagination" />

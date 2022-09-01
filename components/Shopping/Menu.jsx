@@ -11,14 +11,14 @@ function Menu() {
 
     },[])
   return (
-    <div class="flex  items-center justify-center flex-1 content-between">
+    <div className="flex  items-center justify-center flex-1 content-between">
          <div className='self-center mx-4'> 
         <div className='dropdown self-center text-sm '>
-                      <button className="block py-2 hasSubMenu">Company & <span class="inline-block"></span> </button>
+                      <button className="block py-2 hasSubMenu">Company & <span className="inline-block"></span> </button>
                           <ul className="bg-white text-sm subMenu dropdown-menu absolute hidden">
-                            <li><a href="#" class="block py-2 ml-3">About Us</a></li>
-                            <li><a href="#" class="block py-2 ml-3">Investor Relations </a></li>
-                            <li><a href="#" class="block py-2 ml-3">Careers </a></li>
+                            <li><a href="#" className="block py-2 ml-3">About Us</a></li>
+                            <li><a href="#" className="block py-2 ml-3">Investor Relations </a></li>
+                            <li><a href="#" className="block py-2 ml-3">Careers </a></li>
                           </ul>
                     </div>
                     </div>
@@ -26,11 +26,11 @@ function Menu() {
          
                     <div className='self-center mx-4'>       
                     <div className='dropdown self-center text-sm '>
-                      <button className="block py-2 hasSubMenu">Company & <span class="inline-block"></span> </button>
+                      <button className="block py-2 hasSubMenu">Company & <span className="inline-block"></span> </button>
                           <ul className="bg-white subMenu dropdown-menu absolute hidden">
-                            <li><a href="#" class="block py-2 ml-3">About Us</a></li>
-                            <li><a href="#" class="block py-2 ml-3">Investor Relations </a></li>
-                            <li><a href="#" class="block py-2 ml-3">Careers </a></li>
+                            <li><a href="#" className="block py-2 ml-3">About Us</a></li>
+                            <li><a href="#" className="block py-2 ml-3">Investor Relations </a></li>
+                            <li><a href="#" className="block py-2 ml-3">Careers </a></li>
                           </ul>
                     </div>
                     </div>
@@ -38,11 +38,11 @@ function Menu() {
 
                     <div className='self-center mx-4'>       
                     <div className='dropdown self-center text-sm '>
-                      <button className="block py-2 hasSubMenu">Company & <span class="inline-block"></span> </button>
+                      <button className="block py-2 hasSubMenu">Company & <span className="inline-block"></span> </button>
                           <ul className="bg-white subMenu dropdown-menu absolute hidden">
-                            <li><a href="#" class="block py-2 ml-3">About Us</a></li>
-                            <li><a href="#" class="block py-2 ml-3">Investor Relations </a></li>
-                            <li><a href="#" class="block py-2 ml-3">Careers </a></li>
+                            <li><a href="#" className="block py-2 ml-3">About Us</a></li>
+                            <li><a href="#" className="block py-2 ml-3">Investor Relations </a></li>
+                            <li><a href="#" className="block py-2 ml-3">Careers </a></li>
                           </ul>
                     </div>
                     </div>
@@ -50,11 +50,11 @@ function Menu() {
 
                     <div className='self-center mx-4'>       
                     <div className='dropdown self-center text-sm '>
-                      <button className="block py-2 hasSubMenu">Company & <span class="inline-block"></span> </button>
+                      <button className="block py-2 hasSubMenu">Company & <span className="inline-block"></span> </button>
                           <ul className="bg-white subMenu dropdown-menu absolute hidden">
-                            <li><a href="#" class="block py-2 ml-3">About Us</a></li>
-                            <li><a href="#" class="block py-2 ml-3">Investor Relations </a></li>
-                            <li><a href="#" class="block py-2 ml-3">Careers </a></li>
+                            <li><a href="#" className="block py-2 ml-3">About Us</a></li>
+                            <li><a href="#" className="block py-2 ml-3">Investor Relations </a></li>
+                            <li><a href="#" className="block py-2 ml-3">Careers </a></li>
                           </ul>
                     </div>
                     </div>
