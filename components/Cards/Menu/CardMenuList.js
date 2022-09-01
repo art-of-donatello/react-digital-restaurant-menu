@@ -16,6 +16,7 @@ export default function CardRestaurantsModal({menus,setMenus,restaurantid}) {
   const [selectedMenu,setSelectedMenu] = React.useState({});
   const [showModal,setShowModal] = React.useState(0);
 
+  const restaurants = useSelector(state => state.data.restaurant);
 const openModal = (id,name)=>{
 
 setSelectedMenu({id,name});
@@ -24,8 +25,14 @@ setShowModal(1);
 console.log(showModal)
 }
 
+const restUrl=()=>{
+
+return restaurants.filter((e)=>e.id===restaurantid)[0].url
+
+}
+
 const activate = async(id,restaurantid) =>{
-  console.log(id);
+
   
   await axios.post("/api/api/menuActivate",{user,info:{id:id,restaurant:restaurantid}}).then(res=>console.log(res));
 
@@ -83,7 +90,7 @@ const activate = async(id,restaurantid) =>{
                      Denizli
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {menu.active=="active"?null:  (<button onClick={()=>{activate(menu.id,restaurantid)}} className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Activate</button>)}
+                    {menu.active=="active"?(<Link href={"/"+restUrl()}>Menu Link</Link>):  (<button onClick={()=>{activate(menu.id,restaurantid)}} className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Activate</button>)}
                     </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         <button onClick={()=>openModal(menu.id,menu.name)}  type="button" className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
