@@ -19,11 +19,13 @@ const handler = async (req, res) => {
 
   const uploadedImage =async(file)=>{ 
     const blob = fs.readFileSync(file.filepath);
-    await s3.upload({
+    const res = await s3.upload({
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: file.originalFilename,
     Body: blob,
   }).promise()
+
+  return res.Location;
 }
        let resultBody = { status: 'ok', message: 'Files were uploaded successfully' };
       
