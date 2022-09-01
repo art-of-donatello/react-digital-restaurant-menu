@@ -3,8 +3,8 @@ import {createRestaurant,getRestaurants,updateRestaurant} from 'components/syste
 import {getSession } from 'next-auth/react'
 
 export default async function handler(req, res) {
-const session =await getSession({req});
-session?"":res.status(403).json({message:'You must be sign in to view the protected content on this page.',});
+//const session =await getSession({req});
+//session?"":res.status(403).json({message:'You must be sign in to view the protected content on this page.',});
 
 
 

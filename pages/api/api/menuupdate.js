@@ -4,10 +4,9 @@ import { getToken, } from "next-auth/jwt"
 
 export default async function handler(req, res) {
   const token = await getToken({ req })
-const session =await getSession({req});
-session?"":res.status(403).json({message:'You must be sign in to view the protected content on this page.',});
-console.log("menu burada")
-console.log(req.body)
+//const session =await getSession({req});
+//session?"":res.status(403).json({message:'You must be sign in to view the protected content on this page.',});
+
 const response = await updateMenu(req.body);
 
 
