@@ -1,4 +1,4 @@
-import {app,db,stograge } from './firebase'
+import {app,db,stograge } from 'components/system/firebase'
 
 import { getAuth} from "firebase/auth";
 
