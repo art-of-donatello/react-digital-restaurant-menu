@@ -64,7 +64,7 @@ const data= url.reduce((a,b)=>"/"+a+"/"+b);
                 <p className=' text-bold'> {e.description}</p> 
                  </div>
                 
-                <div className=' text-base   font-bold rounded-xl  w-1/2 bg-opacity-25   flex-col flex  justify-start items-end text-white  '>
+                <div className=' text-base   font-bold rounded-xl  w-1/2 bg-opacity-25   flex-col flex  justify-start items-end text-[#FFC107]  '>
                  {e.price}
                 </div>
                  
