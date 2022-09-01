@@ -18,7 +18,7 @@ export default function Home({menu,url,parent}) {
  function Previous() {
     window.history.back()
 }
-console.log(url)
+
 const data= url.reduce((a,b)=>"/"+a+"/"+b);
   return (
     

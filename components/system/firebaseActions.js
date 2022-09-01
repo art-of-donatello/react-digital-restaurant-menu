@@ -284,8 +284,11 @@ const getUrlMenu = async (data) => {
         newquery = query(menu,where('active', "==", "active"));
 
         const getMenu = await getDocsFromServer(menu,newquery);
-   
-        return getMenu.docs[0].data().menu;
+        let activeMenu = [];
+        getMenu.forEach(e=>
+            e.data().active=="active"?activeMenu=e.data().menu:null
+            );
+        return activeMenu;
    
    // const getRes = await getDocsFromServer(res,newquery);
    
