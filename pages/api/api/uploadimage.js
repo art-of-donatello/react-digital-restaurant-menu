@@ -13,8 +13,8 @@ export const config = {
 const handler = async (req, res) => {
 
   const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID1,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY1,
   })
 
   const uploadedImage =async(file)=>{ 
@@ -41,7 +41,7 @@ const handler = async (req, res) => {
 
         const saveFile2 = async (file) => {
           
-          await uploadedImage(file)
+         return await uploadedImage(file)
         }
 /*
         const saveFile1 = async (file) => {
