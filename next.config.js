@@ -13,8 +13,10 @@ const nextConfig = {
     measurementId: "G-JQNSPQ67M6",
     MONGODB_URI: "mongodb+srv://omarx816:135790Omer@cluster0.dcjbm.mongodb.net/?retryWrites=true&w=majority",
     GOOGLE_CLIENT_ID: "284601990552-66k2rvm6fgh667u8e6ol36gsvafsuvm1.apps.googleusercontent.com",
+    
     GOOGLE_CLIENT_SECRET: "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",
-  }
+  },
+  
 }
 
 module.exports = nextConfig
