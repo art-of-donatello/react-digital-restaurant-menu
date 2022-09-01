@@ -31,7 +31,7 @@ const data= url.reduce((a,b)=>"/"+a+"/"+b);
             {parent} 
             </div>
             <div className='w-1/3'>
-        <button onClick={()=>Previous()} className=" bg-slate-500  hover:bg-blue-700 text-white self-end font-bold py-2 pt-2 px-4 rounded"><ChevronsLeft className="inline-block" size={20} />Back 
+        <button onClick={()=>Previous()} className=" bg-[#333]  hover:bg-blue-700 text-white self-end font-bold py-2 pt-2 px-4 rounded"><ChevronsLeft className="inline-block" size={20} />Back 
  
        
  
@@ -40,7 +40,7 @@ const data= url.reduce((a,b)=>"/"+a+"/"+b);
         </div>
 
         
-    <div className="relative items-center self-center max-w-2xl ">
+    <div className="relative items-center self-center ">
         
  
     {menu.length>0?menu.map((e,index)=>e.children?.length>0?(
@@ -55,16 +55,19 @@ const data= url.reduce((a,b)=>"/"+a+"/"+b);
           </div>
            </Link>
           </div></div></Animate>):(<Animate  key={index} play start={{ opacity: 0 }} end={{ opacity: 1 }}>
-            <div className="pt-5 px-5 w-full">
-                 <div  className="flex flex-col justify-center    relative max-w-md ">
-                   
-                    <img layout='fill'   className='flex w-auto rounded-xl  ' src={e.image} />
-                   
-                    <div className=' text-base font-bold rounded-xl bg-opacity-25 bg-gradient-to-t items-center justify-center text-center flex from-black  absolute h-1/4 w-full text-white bottom-[30px]  xm:bottom-[42px] left-3/2  translate-y-3/4 '>
-                 {e.text} 
+            <div className="py-5 px-5 my-3 rounded-xl  min-h-[45px] w-full min-w-[350px] flex flex-row bg-[#333] ">
                 
-                </div>
+
+                   
+                <div className=' text-base   bg-opacity-25 flex flex-col w-1/2   text-white  '>
+                <p className=' font-bold'>{e.text} </p> 
+                <p className=' text-bold'> {e.description}</p> 
                  </div>
+                
+                <div className=' text-base   font-bold rounded-xl  w-1/2 bg-opacity-25   flex-col flex  justify-start items-end text-white  '>
+                 {e.price}
+                </div>
+                 
                
                   </div>
                   </Animate>

@@ -37,8 +37,6 @@ console.log(id+" "+name)
   newMenu = getMenu(user,null,null,null,null,{id:null,restaurant:restaurantid}).then(res=>setMenus(res));
   setMenus(newMenu);
  
-  
-
 
 }
 

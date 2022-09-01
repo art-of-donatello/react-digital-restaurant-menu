@@ -2,7 +2,7 @@ import React,{useState,useEffect} from "react";
 
 import { useRouter } from "next/router";
 import axios from "axios";
-import CardProduct from "components/Cards/Menu/CardProduct";
+import CardProduct from "components/Cards/Menu/templates/CardProduct";
 import { useSelector,useDispatch } from "react-redux";
 import {getMenu as defaultMenu,menuState } from 'redux/menuSlicer'
 export default function Home() {
