@@ -43,7 +43,7 @@ const handler = async (req, res) => {
           
          return await uploadedImage(file)
         }
-/*
+/*   
         const saveFile1 = async (file) => {
             const data = fs.readFileSync(file.filepath);
             fs.writeFileSync(`./public/images/${file.originalFilename}`, data);
