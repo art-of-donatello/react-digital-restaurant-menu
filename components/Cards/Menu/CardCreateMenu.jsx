@@ -7,7 +7,7 @@ import _ from 'lodash'
 import ProductCard from "../ProductCard";
 import { useStateWithRef,clone,getMenu ,uploadImage,RemoveItem,setmenulist,updateMenu} from "components/utils/utils";
 
-   
+
 
 
 //import {GetRestaurantReal} from 'components/system/firebaseActions'
@@ -180,7 +180,7 @@ useEffect(()=>{
 useEffect(()=>{
 
 
-  menulistRef.current.length>0?setMenu(list_to_tree( clone(menulist))):null;
+  menulist.length>0?setMenu(list_to_tree( clone(menulist))):null;
 
   ShowAlt(currentAdres.current.at(-1));
   console.log(menulistRef.current)

@@ -55,7 +55,7 @@ const data=useRouter();
 
 
 useEffect(() => {
-  
+  console.log(data.query)
   defmenu.length==0? dispatch(defaultMenu(data.query.slag)):null
   //getMenu().then(res=>setMenu(res))
         

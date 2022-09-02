@@ -25,7 +25,7 @@ const restaurant =useSelector(state=>state.data.restaurant);
  
   const menus1 = getMenu(user,null,null,null,null,{id:null,restaurant:null}).then(res=>setDefaultMenu(res));
   setDefaultMenu(menus1);
-  console.log(defaultMenu)
+
  },[showModal])
 
   function prettyUrl(value)
@@ -39,7 +39,8 @@ const restaurant =useSelector(state=>state.data.restaurant);
     const newid= uuid();
     setMenus([...menus,{name:dataa.name,restaurant:restaurantid,id:newid,url:newurl}]);
     getMenu(user).then(res=>{
-    updateMenu(defaultMenu.menu,user,dataa.name,{id:newid,restaurant:restaurantid,url:newurl}).then(res=>console.log(res))
+    
+    updateMenu(res[0].menu.menuliste,user,dataa.name,{id:newid,restaurant:restaurantid,url:newurl}).then(res=>console.log(res))
     });
     const menus1 = getMenu(user,null,null,null,null,{id:null,restaurant:restaurantid}).then();
     

@@ -3,6 +3,7 @@ import axios from "axios";
 import {useSelector,useDispatch } from "react-redux";
 import { fetchRestaurants } from 'redux/dataSlicer'
 import uuid from "react-uuid";
+import { uploadImage} from "components/utils/utils";
 //import {GetRestaurantReal} from 'components/system/firebaseActions'
 export default function Modal() {
  const dispatch = useDispatch();
@@ -23,7 +24,9 @@ export default function Modal() {
 
   const handleSubmit=async(e)=>{
     e.preventDefault();
-    
+    const file = e.target.file.files[0];
+    const fileUrl = await uploadImage(file);
+    dataa.image=fileUrl;
     await axios.post("/api/api/restaurantcreate",dataa).then(
 
       dispatch(fetchRestaurants(user)).then("")
@@ -77,8 +80,15 @@ export default function Modal() {
                             <label  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Adress</label>
                             <input onChange={(e)=>setData({...dataa,adres:e.target.value})}  type="text" id="adress" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
                           </div>
-                        
-                          
+                          <input type="file" name="file" className={"bg-gray-50 mt-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} ></input>
+                     
+                          <button
+                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="submit"
+                    
+                  >
+                    Save Changes
+                  </button>
                     </form>
 
 
@@ -92,13 +102,7 @@ export default function Modal() {
                   >
                     Close
                   </button>
-                  <button
-                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={(e) => handleSubmit(e)}
-                  >
-                    Save Changes
-                  </button>
+               
                 </div>
               </div>
             </div>

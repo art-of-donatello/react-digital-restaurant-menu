@@ -18,7 +18,7 @@ const getmenuInfo = {user:req.body.user,info:{restaurant:req.body.info.restauran
    
    const rep={info:{id:req.body.info.id,restaurant:req.body.info.restaurant},user:req.body.user};
            
-console.log(rep)
+
    const response = ActivateMenu(rep);
 
 

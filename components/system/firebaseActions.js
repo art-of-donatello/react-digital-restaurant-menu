@@ -67,12 +67,13 @@ function prettyUrl(value)
 
 
 const createRestaurant=async(restaurant)=>{
-
+    console.log(restaurant.image)
     const data={
        
         id:restaurant.id,
         name:restaurant.name,
         owner:[restaurant.email],
+        image:restaurant.image,
         info:{},
         url:prettyUrl(restaurant.name+( random())),
     

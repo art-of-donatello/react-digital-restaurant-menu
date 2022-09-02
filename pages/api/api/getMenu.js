@@ -18,7 +18,7 @@ const id = req.body.info.id;
 
 
 id?response.forEach(element => {element.data().id==id?data=[...data,element.data()]:null}):response.forEach(element => {data=[...data,element.data()]});
-console.log(data)
+
 res.status(201).json({message:data});
 
   }

@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
 
 const response = await updateRestaurant(req.body);
-console.log(response.forEach(element => {console.log(element.data())}));
+
 
 res.status(201).json({message:response})
 

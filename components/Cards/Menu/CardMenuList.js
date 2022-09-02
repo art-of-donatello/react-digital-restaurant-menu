@@ -6,7 +6,7 @@ import {getMenu} from 'components/utils/utils'
 import Link from "next/link";
 import CardCreateMenu from "components/Cards/Menu/CardCreateMenu";
 
-
+import QRCode from "react-qr-code";
 
 export default function CardRestaurantsModal({menus,setMenus,restaurantid}) {
 
@@ -22,17 +22,17 @@ const openModal = (id,name)=>{
 setSelectedMenu({id,name});
 
 setShowModal(1);
-console.log(showModal)
+
 }
 
 const restUrl=()=>{
 
-return restaurants.filter((e)=>e.id===restaurantid)[0].url
+return restaurants.filter((e)=>e.id===restaurantid)[0]?.url
 
 }
 
 const DeleteMenu = async(id,name) => {
-console.log(id+" "+name)
+
   let newMenu = await axios.post("/api/api/menuDelete",{user,info:{id:id,restaurant:restaurantid}}).then(res=>console.log(res))
   newMenu = getMenu(user,null,null,null,null,{id:null,restaurant:restaurantid}).then(res=>setMenus(res));
   setMenus(newMenu);
@@ -61,7 +61,9 @@ const activate = async(id,restaurantid) =>{
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1">
                   <h3 className="font-semibold text-base text-blueGray-700">
                     Menu List
+                    
                   </h3>
+                  <QRCode   value={window.location.hostname+"/"+restUrl()} />
                 </div>
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                   <button
