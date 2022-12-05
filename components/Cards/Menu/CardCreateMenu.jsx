@@ -24,7 +24,7 @@ export default function CardCreateMenu({restaurantid=null,Menuid='12345',name='D
 
 const response = await axios.post("/api/api/uploadimage", body
   ).then(console.log("ceva p alın"));
-
+     console.log(response.data?.resultBody?.url);
   return response.data?.resultBody?.url;
 }
 

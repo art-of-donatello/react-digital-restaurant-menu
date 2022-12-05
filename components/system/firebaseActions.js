@@ -3,10 +3,9 @@ import {app,db,stograge } from 'components/system/firebase'
 import { getAuth} from "firebase/auth";
 
 
-
 import { collection, addDoc,doc,setDoc,updateDoc,getDoc, getDocs, query, where, onSnapshot,getDocsFromServer, orderBy, deleteDoc } from "firebase/firestore";
 
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL,uploadBytes } from "firebase/storage";
 
 import { isEmpty } from '@firebase/util';
 import { stringify } from 'postcss';
@@ -393,14 +392,35 @@ const Realtime=async()=>{
     
 }
 
-const uploadImage = async (file) => {
+const uploadImage = async (file,blob) => {
 
-    
-    const storageRef = ref(stograge, 'images/' + file.originalFilename);
-    console.log(file)
+    // Create a root reference
+const storage = getStorage();
+
+// Create a reference to 'mountains.jpg'
+//const mountainsRef = ref(storage, file);
+
+// Create a reference to 'images/mountains.jpg'
+const mountainImagesRef = ref(storage, `/images/${file.originalFilename}`);
+
+// While the file names are the same, the references point to different files
+//mountainsRef.name === mountainImagesRef.name;           // true
+
+    console.log(mountainImagesRef.fullPath);
+
+   
+console.log("buraya gelindi")
+// 'file' comes from the Blob or File API
+uploadBytes(mountainImagesRef, blob).then((snapshot) => {
+  console.log('Uploaded a blob or file!');
+});
+   
+   // const storageRef = ref(stograge,file);
+
     // Upload the file and metadata
-    const uploadTask = await uploadBytesResumable(storageRef, file);
-
+  /*
+    const uploadTask = await uploadBytesResumable(mountainImagesRef, blob);
+*/
 }
 const getImage = (file) => {
 

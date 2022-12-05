@@ -8,6 +8,7 @@ import CardCreateMenu from "components/Cards/Menu/CardCreateMenu";
 
 import QRCode from "react-qr-code";
 
+
 export default function CardRestaurantsModal({menus,setMenus,restaurantid}) {
 
   const dispatch = useDispatch();
@@ -24,6 +25,9 @@ setSelectedMenu({id,name});
 setShowModal(1);
 
 }
+
+ 
+  
 
 const restUrl=()=>{
 
