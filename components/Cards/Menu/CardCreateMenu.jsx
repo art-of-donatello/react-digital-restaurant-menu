@@ -128,7 +128,6 @@ const response = await axios.post("/api/api/uploadimage", body
         price:price,
         image:image,
         level:veri,
-        price:0,
         children:null
       }]):null
     
